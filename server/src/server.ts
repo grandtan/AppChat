@@ -17,6 +17,7 @@ io.on("connection", (socket) => {
   console.log("New client connected");
 
   socket.on("loadUserData", async (username, callback) => {
+    console.log("loadUserData event received", username);
     const userData = await redis.hgetall(`user:${username}`);
     const chatMessages = await redis.lrange(`chat:${username}`, 0, -1);
     callback(
@@ -26,10 +27,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("saveUserData", (username, profileIcon) => {
+    console.log("saveUserData event received", username, profileIcon);
     redis.hmset(`user:${username}`, { profileIcon });
   });
 
   socket.on("message", (msg) => {
+    console.log("message event received", msg);
     redis.rpush(`chat:${msg.username}`, JSON.stringify(msg));
     io.emit("message", msg);
   });

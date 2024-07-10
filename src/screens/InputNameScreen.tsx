@@ -34,6 +34,7 @@ const InputNameScreen: React.FC<Props> = ({ navigation }) => {
         "loadUserData",
         username,
         (userData: UserData, chatMessages: ChatMessage[]) => {
+          console.log("loadUserData callback", userData, chatMessages);
           if (userData) {
             setProfileIcon(userData.profileIcon);
           }

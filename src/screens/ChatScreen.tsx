@@ -53,7 +53,8 @@ const ChatScreen: React.FC<Props> = ({ route, navigation }) => {
   }, [username]);
 
   const sendMessage = () => {
-    const msg: Message = { username, text: message };
+    const msg = { username, text: message };
+    console.log("Sending message", msg);
     socket.emit("message", msg);
     setMessages((prevMessages) => [...prevMessages, msg]);
     setMessage("");
