@@ -30,6 +30,19 @@ const ChatScreen: React.FC<Props> = ({ route, navigation }) => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
+    socket.emit(
+      "loadUserData",
+      username,
+      (userData: any, chatMessages: Message[]) => {
+        if (userData) {
+          // Handle userData if needed
+        }
+        if (chatMessages) {
+          setMessages(chatMessages);
+        }
+      }
+    );
+
     socket.on("message", (msg: Message) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
@@ -37,7 +50,7 @@ const ChatScreen: React.FC<Props> = ({ route, navigation }) => {
     return () => {
       socket.off("message");
     };
-  }, []);
+  }, [username]);
 
   const sendMessage = () => {
     const msg: Message = { username, text: message };

@@ -1,23 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Modal } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/AntDesign";
+import { io } from "socket.io-client";
 import { RootStackParamList } from "../types/chat";
 import styles from "../styles/InputNameScreenStyles";
+
+const socket = io("http://localhost:3000");
 
 type Props = NativeStackScreenProps<RootStackParamList, "InputName">;
 
 const icons = ["meho", "shoppingcart", "setting", "camera"];
+
+interface UserData {
+  username: string;
+  profileIcon: string;
+}
+
+interface ChatMessage {
+  username: string;
+  text: string;
+}
 
 const InputNameScreen: React.FC<Props> = ({ navigation }) => {
   const [username, setUsername] = useState<string>("");
   const [profileIcon, setProfileIcon] = useState<string>("meho");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (username) {
+      socket.emit(
+        "loadUserData",
+        username,
+        (userData: UserData, chatMessages: ChatMessage[]) => {
+          if (userData) {
+            setProfileIcon(userData.profileIcon);
+          }
+        }
+      );
+    }
+  }, [username]);
+
   const handleIconPick = (iconName: string) => {
     setProfileIcon(iconName);
     setModalVisible(false);
+  };
+
+  const handleNext = () => {
+    socket.emit("saveUserData", username, profileIcon);
+    navigation.navigate("Chat", { username, profileIcon });
   };
 
   return (
@@ -48,12 +80,7 @@ const InputNameScreen: React.FC<Props> = ({ navigation }) => {
               style={styles.profileIcon}
             />
           )}
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Chat", { username, profileIcon })
-            }
-            style={styles.button}
-          >
+          <TouchableOpacity onPress={handleNext} style={styles.button}>
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
         </View>
