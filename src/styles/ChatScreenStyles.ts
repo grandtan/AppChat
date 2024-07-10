@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   safeArea: {
-    // flex: 1,
     backgroundColor: "#FFD700",
   },
   container: {
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
   },
   myMessageBubble: {
     backgroundColor: "#0B3961",
-    color: "#fff",
+    marginLeft: 5,
   },
   otherMessageBubble: {
     backgroundColor: "#fff",

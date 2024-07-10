@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Image,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/chat";
@@ -70,7 +69,6 @@ const ChatScreen: React.FC<Props> = ({ route, navigation }) => {
         timestamp: new Date().toISOString(),
       };
       ws.current.send(JSON.stringify(msg));
-      setMessages((prevMessages) => [...prevMessages, msg]);
       setMessage("");
     }
   };
