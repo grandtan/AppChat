@@ -1,22 +1,12 @@
 import { StyleSheet } from "react-native";
+
 const styles = StyleSheet.create({
   safeArea: {
-    // backgroundColor: "#FFD700",
+    // flex: 1,
+    backgroundColor: "#FFD700",
   },
   container: {
     flex: 1,
-    // backgroundColor: "#FFD700",
-    // backgroundColor: "red",
-  },
-  topContainer: {
-    backgroundColor: "#FFD700",
-  },
-  bottomContainer: {
-    flex: 1,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    backgroundColor: "#F8F5DF",
-    paddingTop: 10,
   },
   header: {
     flexDirection: "row",
@@ -24,7 +14,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingTop: 25,
     paddingHorizontal: 25,
-    // backgroundColor: "#FFD700",
+    backgroundColor: "#FFD700",
   },
   headerContent: {
     flexDirection: "row",
@@ -54,6 +44,19 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
   },
+  userIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  bottomContainer: {
+    flex: 1,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: "#F8F5DF",
+    paddingTop: 10,
+  },
   messagesList: {
     flex: 1,
     padding: 10,
@@ -61,30 +64,39 @@ const styles = StyleSheet.create({
   messageContainer: {
     maxWidth: "80%",
     padding: 10,
-    paddingHorizontal: 15,
     borderRadius: 10,
     marginVertical: 5,
+    flexDirection: "row",
+    alignItems: "center",
   },
-  myMessage: {
+  myMessageContainer: {
     alignSelf: "flex-end",
-    backgroundColor: "#0B3961",
   },
-  otherMessage: {
+  otherMessageContainer: {
     alignSelf: "flex-start",
+  },
+  messageBubble: {
+    padding: 10,
+    borderRadius: 10,
+  },
+  myMessageBubble: {
+    backgroundColor: "#0B3961",
+    color: "#fff",
+  },
+  otherMessageBubble: {
     backgroundColor: "#fff",
     borderColor: "#e0e0e0",
     borderWidth: 1,
+    marginRight: 5,
   },
   messageText: {
-    color: "#fff",
+    color: "#000",
     fontSize: 14,
   },
   messageTime: {
     fontSize: 10,
     color: "#888",
     marginTop: 5,
-    marginRight: 14,
-    alignSelf: "flex-end",
   },
   inputContainer: {
     marginBottom: 30,

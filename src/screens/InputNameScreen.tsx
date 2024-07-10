@@ -29,7 +29,25 @@ const InputNameScreen: React.FC<Props> = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("Connecting to server...");
+    socket.connect();
+
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
     if (username) {
+      console.log("Loading user data...");
       socket.emit(
         "loadUserData",
         username,
@@ -49,6 +67,7 @@ const InputNameScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleNext = () => {
+    console.log("Saving user data...");
     socket.emit("saveUserData", username, profileIcon);
     navigation.navigate("Chat", { username, profileIcon });
   };
