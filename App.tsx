@@ -1,26 +1,18 @@
+// App.tsx
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { RootStackParamList } from "./src/types/chat";
-import InputNameScreen from "./src/screens/InputNameScreen";
-import ChatScreen from "./src/screens/ChatScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import Quiz from "./src/components/Quiz";
+import Leaderboard from "./src/components/Leaderboard";
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator();
 
 const App: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="InputName">
-        <Stack.Screen
-          name="InputName"
-          component={InputNameScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Chat"
-          component={ChatScreen}
-          options={{ headerShown: false }}
-        />
+      <Stack.Navigator initialRouteName="Quiz">
+        <Stack.Screen name="Quiz" component={Quiz} />
+        <Stack.Screen name="Leaderboard" component={Leaderboard} />
       </Stack.Navigator>
     </NavigationContainer>
   );
