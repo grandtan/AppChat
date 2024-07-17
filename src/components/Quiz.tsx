@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import { Question } from "../models/Question";
 import { shuffleArray } from "../utils/shuffle";
 
@@ -108,27 +115,81 @@ const questions: Question[] = [
 
 const Quiz: React.FC = () => {
   const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
+  const [selectedAnswers, setSelectedAnswers] = useState<{
+    [key: number]: string;
+  }>({});
+  const [showResults, setShowResults] = useState<{ [key: number]: boolean }>(
+    {}
+  );
 
   useEffect(() => {
     const shuffled = shuffleArray(questions);
     setShuffledQuestions(shuffled);
   }, []);
 
+  const handleAnswerPress = (questionIndex: number, answer: string) => {
+    setSelectedAnswers({ ...selectedAnswers, [questionIndex]: answer });
+    setShowResults({ ...showResults, [questionIndex]: true });
+  };
+
   return (
-    <View style={styles.container}>
-      {shuffledQuestions.map((q, index) => (
-        <View key={index} style={styles.questionContainer}>
-          <Text style={styles.questionText}>{q.question}</Text>
-          {shuffleArray(q.answers).map((answer, i) => (
-            <Button key={i} title={answer} onPress={() => {}} />
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          {shuffledQuestions.map((q, questionIndex) => (
+            <View key={questionIndex} style={styles.questionContainer}>
+              <Text style={styles.questionText}>{q.question}</Text>
+              {shuffleArray(q.answers).map((answer, i) => {
+                const isSelected = selectedAnswers[questionIndex] === answer;
+                const isCorrect =
+                  showResults[questionIndex] && answer === q.correctAnswer;
+                const isWrong =
+                  showResults[questionIndex] &&
+                  isSelected &&
+                  answer !== q.correctAnswer;
+
+                return (
+                  <TouchableOpacity
+                    key={i}
+                    style={[
+                      styles.answerButton,
+                      isSelected && styles.selectedAnswerButton,
+                      isCorrect && styles.correctAnswerButton,
+                      isWrong && styles.wrongAnswerButton,
+                    ]}
+                    onPress={() => handleAnswerPress(questionIndex, answer)}
+                    disabled={showResults[questionIndex]}
+                  >
+                    <Text
+                      style={[
+                        styles.answerText,
+                        isSelected && styles.selectedAnswerText,
+                        isCorrect && styles.correctAnswerText,
+                        isWrong && styles.wrongAnswerText,
+                      ]}
+                    >
+                      {answer}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           ))}
         </View>
-      ))}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -137,11 +198,43 @@ const styles = StyleSheet.create({
   },
   questionContainer: {
     marginBottom: 20,
+    width: "100%",
   },
   questionText: {
     fontSize: 18,
     marginBottom: 10,
     textAlign: "center",
+  },
+  answerButton: {
+    borderWidth: 1,
+    borderColor: "#800080",
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
+    alignItems: "center",
+  },
+  selectedAnswerButton: {
+    borderColor: "#800080",
+  },
+  correctAnswerButton: {
+    borderColor: "#00FF00",
+    backgroundColor: "#d4edda",
+  },
+  wrongAnswerButton: {
+    borderColor: "#FF0000",
+    backgroundColor: "#f8d7da",
+  },
+  answerText: {
+    fontSize: 16,
+  },
+  selectedAnswerText: {
+    color: "#800080",
+  },
+  correctAnswerText: {
+    color: "#00FF00",
+  },
+  wrongAnswerText: {
+    color: "#FF0000",
   },
 });
 
